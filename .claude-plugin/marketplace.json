@@ -1,0 +1,35 @@
+{
+  "name": "salesforce-toolkit",
+  "metadata": {
+    "description": "A collection of open-source Salesforce skills for Claude Code — SF CLI-driven plugins and beyond."
+  },
+  "owner": {
+    "name": "Bobby White"
+  },
+  "plugins": [
+    {
+      "name": "sf-bulk-analyzer",
+      "source": {
+        "source": "github",
+        "repo": "bobbywhitesfdc/sf-bulk-analyzer"
+      },
+      "description": "Analyze Salesforce Bulk API V1/V2 job failures and reverse engineer ETL upload field mappings."
+    },
+    {
+      "name": "sf-secret-inject",
+      "source": {
+        "source": "github",
+        "repo": "bobbywhitesfdc/sf-secret-inject"
+      },
+      "description": "Securely inject secrets into Salesforce External Credential principals via the Named Credentials REST API."
+    },
+    {
+      "name": "sf-agentpmd",
+      "source": {
+        "source": "github",
+        "repo": "bobbywhitesfdc/sf-agentpmd"
+      },
+      "description": "McCabe cyclomatic complexity and LOC analysis for AgentScript (.agent) bundles and their apex:// backing classes."
+    }
+  ]
+}
