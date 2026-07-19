@@ -1,0 +1,22 @@
+# tiers.yaml — install-tier policy for the salesforce-toolkit marketplace.
+#
+# A sidecar (deliberately NOT inside marketplace.json, which has a fixed schema
+# that would reject custom fields). Consumer-side tooling fetches this file over
+# raw HTTP and honors it when deciding how aggressively to surface each skill.
+# The marketplace owner sets the policy here; consumers do not hardcode it.
+#
+# tier values:
+#   auto        — a consumer's setup step MAY headless-install the SKILL without
+#                 prompting. Safe: installing the skill does NOT install its `sf`
+#                 CLI plugin — that stays opt-in behind the skill's own
+#                 consent-gated Preflight on first use. No CLI lands without a yes.
+#   recommended — surface and nudge (e.g. a setup prompt, a session-start hint),
+#                 but require an explicit opt-in before installing.
+#   listed      — discoverable via the marketplace only; no nudge.
+#
+# A skill in the catalog but absent from this map is treated as `listed`.
+
+tiers:
+  sf-bulk-analyzer: auto
+  sf-secret-inject: auto
+  sf-agentpmd: recommended

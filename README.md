@@ -32,6 +32,20 @@ The skills this marketplace advertises. Install any **Available** skill with the
 
 > The **Skill** column is the Claude plugin's install id. The **SF CLI plugin** column is the underlying `sf` plugin (and its `sf` topic) that the skill bootstraps on first use.
 
+## Install tiers (`tiers.yaml`)
+
+Adding a marketplace never installs anything on its own — the two-step model (add, then install) is deliberate. But downstream tooling that provisions a whole team's environment often wants a *policy*: which skills are safe to install automatically, which to merely recommend, and which to just list. This marketplace publishes that policy as a sidecar, [`tiers.yaml`](tiers.yaml), at the repo root:
+
+| Tier | Meaning |
+| --- | --- |
+| `auto` | A consumer's setup step may headless-install the **skill** without prompting. Safe because installing the skill does **not** install its `sf` CLI plugin — that stays opt-in behind the skill's own consent-gated Preflight on first use. No CLI lands without a yes. |
+| `recommended` | Surface and nudge (a setup prompt, a session-start hint), but require an explicit opt-in before installing. |
+| `listed` | Discoverable through the marketplace only; no nudge. A catalog skill absent from `tiers.yaml` is treated as `listed`. |
+
+Why a sidecar and not a field in `marketplace.json`? That file has a fixed schema and rejects custom keys, so the tier map lives beside it instead. Consumers fetch `tiers.yaml` over raw HTTP (`https://raw.githubusercontent.com/bobbywhitesfdc/salesforce-toolkit/main/tiers.yaml`) and degrade gracefully when it's unreachable — treating every skill as `listed`. The convention is generic: any marketplace can ship a `tiers.yaml` with the same three tiers, and any consumer tool can honor it.
+
+The current policy: `sf-bulk-analyzer` and `sf-secret-inject` are `auto`; `sf-agentpmd` is `recommended`.
+
 ## Staying up to date
 
 There's no push notification when skills are added or revised — you either pull on demand, or opt in to automatic updates.
