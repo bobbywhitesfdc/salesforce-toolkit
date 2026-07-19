@@ -32,9 +32,36 @@ The skills this marketplace advertises. Install any **Available** skill with the
 
 > The **Skill** column is the Claude plugin's install id. The **SF CLI plugin** column is the underlying `sf` plugin (and its `sf` topic) that the skill bootstraps on first use.
 
-## How updates work
+## Staying up to date
 
-Skills track their source repositories. Run `/plugin marketplace update salesforce-toolkit` to pull the latest. A skill's underlying Salesforce CLI plugin updates separately via `sf plugins install <name>`.
+There's no push notification when skills are added or revised — you either pull on demand, or opt in to automatic updates.
+
+### Check for updates manually
+
+```
+/plugin marketplace update salesforce-toolkit
+```
+
+This refreshes the catalog (new skills appear under `/plugin` → **Discover**) and fetches new versions of the skills from their source repositories. Run `/reload-plugins` to pick up updates in the current session without restarting. A skill's underlying `sf` CLI plugin updates separately via `sf plugins install <name>`.
+
+### Opt in to automatic updates
+
+Enable auto-update so the marketplace refreshes in the background at startup. Toggle it in the UI — `/plugin` → **Marketplaces** → select `salesforce-toolkit` → **Enable auto-update** — or pre-configure it in your Claude Code settings (`~/.claude/settings.json` for user scope, or `.claude/settings.json` for a single project). This one block both registers the marketplace *and* turns on auto-update:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "salesforce-toolkit": {
+      "source": { "source": "github", "repo": "bobbywhitesfdc/salesforce-toolkit" },
+      "autoUpdate": true
+    }
+  }
+}
+```
+
+Auto-update runs in the background shortly after startup and does not block launch; the running session keeps its launch-time versions until you run `/reload-plugins` or start a new session.[^autoupdate]
+
+[^autoupdate]: Known limitation: `autoUpdate` reliably refreshes the catalog and covers fresh installs, but may not re-install *already-installed* plugins — see [anthropics/claude-code#61854](https://github.com/anthropics/claude-code/issues/61854). Until that resolves, `/plugin marketplace update salesforce-toolkit` (then `/reload-plugins`) is the guaranteed way to move an existing install to a new version.
 
 ## License
 
