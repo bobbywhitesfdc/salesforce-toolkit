@@ -46,6 +46,30 @@ Why a sidecar and not a field in `marketplace.json`? That file has a fixed schem
 
 The current policy: `sf-bulk-analyzer` and `sf-secret-inject` are `auto`; `sf-agentpmd` is `recommended`.
 
+## What's New
+
+### sf-agentpmd 1.0.0 — 2026-10-24
+
+**Fix: base64-encoded `.agent` files now analyzed correctly** ([#7](https://github.com/bobbywhitesfdc/sf-agentpmd/issues/7))
+
+Salesforce CLI serializes `.agent` files as base64 blobs on retrieve. Previous versions read those bytes as-is, found no AgentScript tokens, and silently returned CC = 0 for every bundle. 1.0.0 detects and unwraps the encoding — including the double-encoded variant some retrieve flows produce — before parsing.
+
+This release also ships the latest AgentScript parser (`@agentscript/parser-javascript` 3.4.2, up from 2.4.0) so newly-introduced AgentScript syntax is recognized and counted correctly.
+
+If you've run `sf agentpmd analyze` against a retrieved project and seen all-zero complexity, upgrade and re-run:
+
+```
+sf plugins install sf-agentpmd@latest
+```
+
+Or, if you installed via this marketplace:
+
+```
+/plugin marketplace update salesforce-toolkit
+```
+
+---
+
 ## Staying up to date
 
 There's no push notification when skills are added or revised — you either pull on demand, or opt in to automatic updates.
